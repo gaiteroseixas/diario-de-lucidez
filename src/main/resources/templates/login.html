@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Diário de Lucidez</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Diário de Lucidez</div>
+            <a th:href="@{/}" class="btn-alt" style="color: white; text-decoration: none;">Voltar ao Início</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <div class="card" style="margin: 0 auto; width: 100%; max-width: 400px; text-align: left;">
+            <h2 style="color: #00d2ff; text-align: center;">Entrar no Diário</h2>
+            
+            <p th:if="${erro}" th:text="${erro}" style="color: #ff4b2b; text-align: center; font-size: 0.9rem;"></p>
+
+            <form th:action="@{/login}" method="post">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px;">E-mail:</label>
+                    <input type="email" name="email" required 
+                           style="width: 100%; padding: 10px; border-radius: 5px; border: none; background: rgba(255,255,255,0.1); color: white;">
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 5px;">Senha:</label>
+                    <input type="password" name="senha" required 
+                           style="width: 100%; padding: 10px; border-radius: 5px; border: none; background: rgba(255,255,255,0.1); color: white;">
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; border: none; cursor: pointer;">Acessar Consciência</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                Ainda não tem conta? <a th:href="@{/cadastro}" style="color: #9d50bb; text-decoration: none; font-weight: bold;">Crie uma aqui.</a>
+            </p>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 20px;">
+        <p>&copy; 2026 Diário de Lucidez - Cerquilho, SP</p>
+    </footer>
+</body>
+</html>

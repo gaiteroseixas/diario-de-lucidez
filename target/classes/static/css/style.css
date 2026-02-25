@@ -1,0 +1,376 @@
+/* =========================================
+   1. CONFIGURAÇÕES GLOBAIS
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #e0e0e0;
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   2. NAVEGAÇÃO (ESTILO NAVBAR)
+   ========================================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 10%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px);
+    border-bottom: 2px solid rgba(3, 233, 244, 0.3);
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+} /* CHAVE ADICIONADA AQUI */
+
+.logo {
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #03e9f4;
+    text-transform: uppercase;
+}
+
+.exit-link {
+    color: #ff6b6b;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.exit-link:hover {
+    color: #ff4757;
+    text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.link-cadastro {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    border-bottom: 1px solid transparent;
+    transition: 0.3s;
+}
+
+.link-cadastro:hover {
+    color: #03e9f4;
+    border-bottom: 1px solid #03e9f4;
+}
+
+/* =========================================
+   3. CONTAINERS E CARDS (GLASSMORPHISM)
+   ========================================= */
+.dashboard-container, .container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.card, .analysis-card, .dream-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover, .dream-card:hover {
+    transform: translateY(-5px);
+    border-color: #03e9f4;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================
+   4. FORMULÁRIO ONÍRICO
+   ========================================= */
+.form-row {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.input-title {
+    width: 100%;
+    background: rgba(28, 42, 63, 0.6) !important;
+    border: 1px solid rgba(3, 233, 244, 0.3) !important;
+    padding: 15px 20px;
+    font-size: 1.4rem;
+    color: white;
+    border-radius: 12px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-title:focus {
+    border-color: #03e9f4 !important;
+    box-shadow: 0 0 15px rgba(3, 233, 244, 0.2);
+}
+
+.dream-editor {
+    min-height: 250px;
+    background: #ffffff;
+    color: #2d3748;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* =========================================
+   5. BOTÕES
+   ========================================= */
+.btn, .btn-save {
+    display: inline-block;
+    padding: 14px 40px;
+    background: linear-gradient(90deg, #03e9f4, #9d50bb);
+    color: #141e30;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-login {
+    background: linear-gradient(90deg, #03e9f4, #00d2ff);
+    color: #0b0e14 !important;
+    padding: 12px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    transition: 0.4s;
+    box-shadow: 0 0 15px rgba(3, 233, 244, 0.4);
+}
+
+.btn-login:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #03e9f4;
+    background: #fff;
+} /* CHAVE ADICIONADA AQUI */
+
+.btn:hover, .btn-save:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(3, 233, 244, 0.6);
+    color: white;
+}
+
+.btn-delete {
+    background: #ff4757;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+/* Botão de Exclusão no Histórico */
+.btn-delete {
+    background: #ff4757; /* Vermelho vibrante */
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.btn-delete:hover {
+    background: #ff6b6b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+}
+
+/* =========================================
+   6. GRID DE HISTÓRICO E ANÁLISE
+   ========================================= */
+.dream-history-grid, .analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.card-meta {
+    font-size: 0.85rem;
+    color: #03e9f4;
+    margin-bottom: 10px;
+}
+
+.card-excerpt {
+    font-size: 0.95rem;
+    color: #cbd5e0;
+    
+    /* Propriedades para truncar o texto em 3 linhas */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* Versão para Chrome/Safari/Edge */
+    line-clamp: 3;         /* Propriedade padrão (Resolve o aviso) */
+    
+    overflow: hidden;
+}
+
+/* Boas-vindas */
+
+.boas-vindas-topo {
+    text-align: center;
+    padding: 10px 0; /* Espaçamento mínimo */
+    margin-bottom: 5px;
+}
+
+.boas-vindas-topo p {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #b0b0b0;
+}
+
+.boas-vindas-topo span {
+    color: #03e9f4;
+    font-weight: 700;
+}
+
+/* =========================================
+   RESTAURAÇÃO DAS ABAS (HOME)
+   ========================================= */
+
+
+
+.exit-link {
+    margin-left: auto;
+    padding-bottom: 10px;
+    color: #ff6b6b;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* --- CONTAINER DO FICHÁRIO --- */
+.fichario-wrapper {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* --- CABEÇALHO DE ABAS --- */
+.fichario-tabs {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding-left: 20px;
+}
+
+.tab-btn {
+    padding: 10px 25px;
+    background: rgba(255, 255, 255, 0.05); /* Cor da aba inativa */
+    border: 1px solid rgba(3, 233, 244, 0.2);
+    border-bottom: none;
+    border-radius: 12px 12px 0 0; /* Arredondado apenas no topo */
+    color: #8a9fb5;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    top: 2px; /* Encaixa sobre a borda do conteúdo */
+    transition: 0.3s;
+}
+
+/* --- ABA ATIVA (O SEGREDO DO FICHÁRIO) --- */
+.tab-btn.active {
+    background: #1c2a3f !important; /* Mesma cor do fundo da página debaixo */
+    color: #03e9f4;
+    border: 1px solid rgba(3, 233, 244, 0.5);
+    border-bottom: 2px solid #1c2a3f !important; /* Apaga a linha divisória */
+    padding-bottom: 15px; /* Deixa a aba mais "alta" para fundir */
+    z-index: 5;
+}
+
+/* --- CONTEÚDO (A FOLHA DO FICHÁRIO) --- */
+.tab-content {
+    background: #1c2a3f; /* Fundo sólido para parecer uma pasta real */
+    border: 1px solid rgba(3, 233, 244, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.tab-exit {
+    margin-left: auto;
+    color: #ff6b6b;
+    text-decoration: none;
+    font-weight: bold;
+    padding-bottom: 8px;
+}
+
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   ESTILOS DE AUTENTICAÇÃO (LOGIN/CADASTRO)
+   ========================================= */
+
+/* O Card Principal */
+.auth-card {
+    background: rgba(30, 41, 59, 0.8); /* Fundo escuro translúcido */
+    border: 1px solid #03e9f4;         /* Borda Ciano Neon */
+    border-radius: 15px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Sombra base */
+    transition: all 0.4s ease; /* O SEGREDO DA SUAVIZAÇÃO */
+}
+
+/* O EFEITO HOVER (Quando passa o mouse no card) */
+.auth-card:hover {
+    transform: translateY(-10px) scale(1.02); /* Sobe e aumenta levemente */
+    box-shadow: 0 20px 40px rgba(3, 233, 244, 0.3); /* Sombra ciano intensa */
+    border-color: #fff; /* Borda brilha em branco */
+}
+
+/* O Botão Degradê */
+.btn-auth-gradient {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    border-radius: 30px;
+    border: none;
+    background: linear-gradient(90deg, #03e9f4, #b942f5); /* Ciano para Roxo */
+    color: #1c2a3f;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease; /* Suavização do botão */
+}
+
+/* O EFEITO HOVER DO BOTÃO */
+.btn-auth-gradient:hover {
+    transform: scale(1.05); /* Botão cresce */
+    box-shadow: 0 0 25px rgba(3, 233, 244, 0.7); /* Brilho forte ciano */
+    color: white;
+}

@@ -1,0 +1,199 @@
+package com.diario;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Controller
+public class LoginController {
+
+    @Autowired
+    private SonhoRepository sonhoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    
+    @GetMapping("/")
+    public String exibirIndex() {
+        return "index";
+    }
+
+    @GetMapping("/login")
+    public String exibirLogin() {
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String processarLogin(String email, String senha, Model model, HttpSession session) {
+        Usuario user = usuarioRepository.findByEmail(email);
+
+        if (user != null && user.getSenha().equals(senha)) {
+            session.setAttribute("usuarioLogado", user);
+            return "redirect:/home";
+        }
+        
+        model.addAttribute("erro", "E-mail ou senha inválidos!");
+        return "login";
+    }
+
+    @GetMapping("/home")
+    public String exibirHome(Model model, HttpSession session) {
+        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+        
+        model.addAttribute("nomeUsuario", user.getNome()); 
+
+        List<Sonho> listaSonhos = sonhoRepository.findByUsuario(user);
+     // Agrupa os sonhos pela data, do mais recente para o mais antigo
+        Map<java.time.LocalDate, List<Sonho>> sonhosAgrupados = listaSonhos.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                        Sonho::getDataRegistro,
+                        () -> new java.util.TreeMap<>(java.util.Collections.reverseOrder()), 
+                        java.util.stream.Collectors.toList()
+                ));
+
+        // Manda os grupos para a tela
+        model.addAttribute("sonhosAgrupados", sonhosAgrupados);
+
+        Map<String, Integer> mPers = new HashMap<>(), mLug = new HashMap<>(), mSimbolos = new HashMap<>();
+        Map<String, Integer> mPensamentos = new HashMap<>(), mEmocoes = new HashMap<>(), 
+                            mSensacoes = new HashMap<>(), mPercepcoes = new HashMap<>();
+        Map<String, Integer> mAcaoEgo = new HashMap<>(), mAcaoPers = new HashMap<>(), mAcaoObj = new HashMap<>();
+        Map<String, Integer> mFormaEgo = new HashMap<>(), mFormaPers = new HashMap<>(), 
+                            mFormaObj = new HashMap<>(), mFormaCenario = new HashMap<>();
+        Map<String, Integer> mPapelEgo = new HashMap<>(), mLugarCen = new HashMap<>(), 
+                            mTempoCen = new HashMap<>(), mSituacao = new HashMap<>();
+        
+        int totalLucidos = 0;
+
+        for (Sonho s : listaSonhos) {
+            if (s.getLucidez() != null && s.getLucidez() > 0) totalLucidos++;
+            contar(s.getPersonagens(), mPers);
+            contar(s.getLugares(), mLug);
+            contar(s.getSimbolos(), mSimbolos);
+            contar(s.getPensamentos(), mPensamentos);
+            contar(s.getEmocoes(), mEmocoes);
+            contar(s.getSensacoes(), mSensacoes);
+            contar(s.getPercepcoes(), mPercepcoes);
+            contar(s.getAcaoEgo(), mAcaoEgo);
+            contar(s.getAcaoPersonagem(), mAcaoPers);
+            contar(s.getAcaoObjeto(), mAcaoObj);
+            contar(s.getFormaEgo(), mFormaEgo);
+            contar(s.getFormaPersonagem(), mFormaPers);
+            contar(s.getFormaObjeto(), mFormaObj);
+            contar(s.getFormaCenario(), mFormaCenario);
+            contar(s.getPapelEgo(), mPapelEgo);
+            contar(s.getLugarCenario(), mLugarCen);
+            contar(s.getTempoCenario(), mTempoCen);
+            contar(s.getSituacaoBizarra(), mSituacao);
+        }
+
+        // =========================================================
+        // A MAGIA ACONTECE AQUI: Ordenando tudo do Maior para o Menor
+        // =========================================================
+        mPers = ordenarPorFrequencia(mPers);
+        mLug = ordenarPorFrequencia(mLug);
+        mSimbolos = ordenarPorFrequencia(mSimbolos);
+        
+        mPensamentos = ordenarPorFrequencia(mPensamentos);
+        mEmocoes = ordenarPorFrequencia(mEmocoes);
+        mSensacoes = ordenarPorFrequencia(mSensacoes);
+        mPercepcoes = ordenarPorFrequencia(mPercepcoes);
+        
+        mAcaoEgo = ordenarPorFrequencia(mAcaoEgo);
+        mAcaoPers = ordenarPorFrequencia(mAcaoPers);
+        mAcaoObj = ordenarPorFrequencia(mAcaoObj);
+        
+        mFormaEgo = ordenarPorFrequencia(mFormaEgo);
+        mFormaPers = ordenarPorFrequencia(mFormaPers);
+        mFormaObj = ordenarPorFrequencia(mFormaObj);
+        mFormaCenario = ordenarPorFrequencia(mFormaCenario);
+        
+        mPapelEgo = ordenarPorFrequencia(mPapelEgo);
+        mLugarCen = ordenarPorFrequencia(mLugarCen);
+        mTempoCen = ordenarPorFrequencia(mTempoCen);
+        mSituacao = ordenarPorFrequencia(mSituacao);
+        // =========================================================
+
+        model.addAttribute("listaSonhos", listaSonhos);
+        model.addAttribute("totalSonhos", listaSonhos.size());
+        model.addAttribute("totalLucidos", totalLucidos);
+        model.addAttribute("cPers", mPers);
+        model.addAttribute("cLug", mLug);
+        model.addAttribute("cSimbolos", mSimbolos);
+        model.addAttribute("cPensamentos", mPensamentos); 
+        model.addAttribute("cEmocoes", mEmocoes);
+        model.addAttribute("cSensacoes", mSensacoes); 
+        model.addAttribute("cPercepcoes", mPercepcoes);
+        model.addAttribute("cAcaoEgo", mAcaoEgo); 
+        model.addAttribute("cAcaoPers", mAcaoPers);
+        model.addAttribute("cAcaoObj", mAcaoObj); 
+        model.addAttribute("cFormaEgo", mFormaEgo);
+        model.addAttribute("cFormaPers", mFormaPers); 
+        model.addAttribute("cFormaObj", mFormaObj);
+        model.addAttribute("cFormaCen", mFormaCenario); 
+        model.addAttribute("cPapelEgo", mPapelEgo);
+        model.addAttribute("cLugarCen", mLugarCen); 
+        model.addAttribute("cTempoCen", mTempoCen);
+        model.addAttribute("cSituacao", mSituacao);
+
+        return "home";
+    }
+
+    @PostMapping("/salvar-sonho")
+    public String salvarSonho(Sonho novoSonho, HttpSession session) {
+        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+        if (user != null) {
+            novoSonho.setUsuario(user);
+            sonhoRepository.save(novoSonho);
+        }
+        return "redirect:/home";
+    }
+
+    @GetMapping("/excluir-sonho/{id}")
+    public String excluirSonho(@PathVariable Long id) {
+        sonhoRepository.deleteById(id);
+        return "redirect:/home?aba=historico";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
+    // Método que quebra as vírgulas e conta as palavras
+    private void contar(String texto, Map<String, Integer> mapa) {
+        if (texto != null && !texto.isEmpty()) {
+            String[] itens = texto.split(",");
+            for (String item : itens) {
+                String limpo = item.trim().toLowerCase();
+                if (!limpo.isEmpty()) {
+                    mapa.put(limpo, mapa.getOrDefault(limpo, 0) + 1);
+                }
+            }
+        }
+    }
+
+    // NOVO MÉTODO: Organiza os itens do que aparece mais para o que aparece menos!
+    private <K, V extends Comparable<? super V>> java.util.Map<K, V> ordenarPorFrequencia(java.util.Map<K, V> mapaOriginal) {
+        return mapaOriginal.entrySet().stream()
+                .sorted(java.util.Map.Entry.<K, V>comparingByValue().reversed())
+                .collect(java.util.stream.Collectors.toMap(
+                        java.util.Map.Entry::getKey,
+                        java.util.Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        java.util.LinkedHashMap::new 
+                ));
+    }
+}

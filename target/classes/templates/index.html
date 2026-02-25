@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário de Lucidez</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <style>
+        .card {
+            cursor: pointer; /* Muda o mouse para uma mãozinha indicando que é clicável */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden; /* Esconde o texto extra até o cartão abrir */
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(3, 233, 244, 0.15);
+            border-color: rgba(3, 233, 244, 0.5);
+        }
+
+        /* O texto extra que fica escondido por padrão */
+        .extra-info {
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.4s ease-in-out;
+            color: #8a9fb5;
+            font-size: 0.9em;
+            margin-top: 0;
+            border-top: 1px dashed rgba(3, 233, 244, 0.2);
+            padding-top: 0;
+        }
+
+        /* Quando o cartão ganha a classe 'ativo' pelo JavaScript, ele revela o texto */
+        .card.ativo .extra-info {
+            max-height: 200px; /* Espaço suficiente para o texto abrir */
+            opacity: 1;
+            margin-top: 15px;
+            padding-top: 15px;
+        }
+
+        /* Um pequeno aviso visual de "clique aqui" */
+        .click-hint {
+            display: block;
+            font-size: 0.75em;
+            color: #b942f5;
+            margin-top: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .card.ativo .click-hint {
+            display: none; /* Some quando o cartão está aberto */
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">DIÁRIO DE LUCIDEZ</div>
+        <div class="auth-buttons">
+            <a th:href="@{/login}" class="btn-login">Entrar</a>
+            <a th:href="@{/cadastro}" class="link-cadastro">Criar Conta</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero-section">
+            <h1>O que é um <span class="highlight">Sonho Lúcido?</span></h1>
+            <p>
+                O sonho lúcido é o instante em que a consciência desperta dentro da própria narrativa onírica. 
+                Mais do que explorar mundos infinitos, a lucidez é uma ferramenta profunda para investigar a natureza da mente 
+                e compreender como co-criamos a nossa realidade. É um laboratório onde você se torna, simultaneamente, 
+                o observador e o universo observado enquanto dorme.
+            </p>
+        </section>
+
+        <section class="info-grid">
+            <h2>Como este diário te ajuda?</h2>
+            <div class="cards-container">
+                
+                <div class="card" onclick="toggleCard(this)">
+                    <h3>Recordação Onírica</h3>
+                    <p>Registrar seus relatos fortalece a memória onírica, o passo fundamental para a lucidez.</p>
+                    <span class="click-hint">+ Clique para expandir</span>
+                    <div class="extra-info">
+                        A memória é a ponte. Sem ela, até o mais vívido dos sonhos se perde no esquecimento ao acordar. 
+                        Escrever ancora a experiência na realidade física e avisa ao seu cérebro que aquele mundo importa.
+                    </div>
+                </div>
+
+                <div class="card" onclick="toggleCard(this)">
+                    <h3>Sinais de Sonho</h3>
+                    <p>Identifique padrões e gatilhos recorrentes para despertar sua consciência.</p>
+                    <span class="click-hint">+ Clique para expandir</span>
+                   <div class="extra-info">
+    Anomalias da matrix onírica. Relógios derretidos, luzes que não acendem ou arquiteturas impossíveis. 
+    O Diário mapeia essas recorrências para que você as reconheça quando estiver dormindo. 
+    Dividimos a análise em duas categorias: a <strong>básica</strong>, que registra a frequência com que esses elementos aparecem, e a <strong>avançada</strong>, que possibilita ao sonhador uma compreensão muito mais profunda da estrutura do seu universo onírico.
+</div>
+                </div>
+
+                <div class="card" onclick="toggleCard(this)">
+                    <h3>Privacidade Total</h3>
+                    <p>Seus registros são protegidos e acessíveis apenas por você.</p>
+                    <span class="click-hint">+ Clique para expandir</span>
+                    <div class="extra-info">
+                        O inconsciente é um laboratório íntimo e sagrado. Garantimos que suas explorações mais profundas 
+                        fiquem seguras no banco de dados, protegidas por senha e longe de olhares externos.
+                    </div>
+                </div>
+
+                <div class="card" onclick="toggleCard(this)">
+                    <h3>Totalmente gratuito!</h3>
+                    <p>Se você gostou do projeto, contribua via PIX: <br><strong>014c8e89-83f9-4e6c-afb1-6da6c6373b1d</strong></p>
+                    <span class="click-hint">+ Clique para expandir</span>
+                    <div class="extra-info">
+                        (Edmur Santana da Silva, PicPay). Projetos independentes vivem da comunidade. 
+                        Sua doação apoia diretamente os custos de servidor e permite que a plataforma continue evoluindo 
+                        sem anúncios invasivos.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Diário de Lucidez - Cerquilho, SP</p>
+    </footer>
+
+    <script>
+        function toggleCard(elemento) {
+            // Verifica se o cartão já está aberto. Se estiver, ele fecha. Se não, ele abre.
+            elemento.classList.toggle('ativo');
+        }
+    </script>
+</body>
+</html>

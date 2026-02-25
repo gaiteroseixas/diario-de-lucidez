@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Diário de Lucidez</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Diário de Lucidez</div>
+            <a th:href="@{/}" class="btn-alt" style="color: white; text-decoration: none;">Voltar ao Início</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <div class="card" style="margin: 0 auto; width: 100%; max-width: 400px; text-align: left;">
+            <h2 style="color: #00d2ff; text-align: center;">Criar Conta Onírica</h2>
+            
+            <p th:if="${erro}" th:text="${erro}" style="color: #ff4b2b; text-align: center; font-size: 0.9rem;"></p>
+
+            <form th:action="@{/cadastro}" method="post" onsubmit="return validarSenhas()">
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px;">Nome:</label>
+                    <input type="text" name="nome" required 
+                           style="width: 100%; padding: 10px; border-radius: 5px; border: none; background: rgba(255,255,255,0.1); color: white;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px;">E-mail:</label>
+                    <input type="email" name="email" required 
+                           style="width: 100%; padding: 10px; border-radius: 5px; border: none; background: rgba(255,255,255,0.1); color: white;">
+                </div>
+
+                <div style="margin-bottom: 25px;">
+    
+    <label style="display: block; margin-bottom: 5px; color: #8a9fb5;">Senha:</label>
+    <div style="position: relative; margin-bottom: 15px;">
+        <input type="password" id="senha" name="senha" placeholder="Crie uma senha" required 
+               style="width: 100%; padding: 10px; padding-right: 40px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.1); color: white; outline: none; box-sizing: border-box;">
+        
+        <button type="button" onclick="mostrarSenha('senha', 'btn-olho-1')" id="btn-olho-1" 
+                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #8a9fb5; cursor: pointer; font-size: 1.1em;">
+            👁️
+        </button>
+    </div>
+
+    <label style="display: block; margin-bottom: 5px; color: #8a9fb5;">Confirme a Senha:</label>
+    <div style="position: relative; margin-bottom: 5px;">
+        <input type="password" id="confirmaSenha" placeholder="Repita a senha" required 
+               style="width: 100%; padding: 10px; padding-right: 40px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.1); color: white; outline: none; box-sizing: border-box;">
+        
+        <button type="button" onclick="mostrarSenha('confirmaSenha', 'btn-olho-2')" id="btn-olho-2" 
+                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #8a9fb5; cursor: pointer; font-size: 1.1em;">
+            👁️
+        </button>
+    </div>
+
+    <p id="erro-senha" style="color: #ff4b2b; font-size: 0.85em; display: none; margin-top: 5px; margin-bottom: 0;">
+        ❌ As senhas não coincidem. Digite novamente.
+    </p>
+    
+</div>
+
+                <button type="submit" class="btn" style="width: 100%; border: none; cursor: pointer;">Finalizar Cadastro</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                Já tem uma conta? <a th:href="@{/login}" style="color: #9d50bb; text-decoration: none; font-weight: bold;">Entre aqui.</a>
+            </p>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 20px;">
+        <p>&copy; 2026 Diário de Lucidez - Cerquilho, SP</p>
+    </footer>
+    
+    <script>
+    // 1. Função para mostrar/esconder a senha
+    function mostrarSenha(idInput, idBotao) {
+        var input = document.getElementById(idInput);
+        var botao = document.getElementById(idBotao);
+
+        if (input.type === "password") {
+            input.type = "text";
+            botao.innerText = "🙈"; // Muda o ícone quando está visível
+        } else {
+            input.type = "password";
+            botao.innerText = "👁️"; // Volta para o olho normal
+        }
+    }
+
+    // 2. Função que impede o cadastro se as senhas forem diferentes
+    function validarSenhas() {
+        var senha1 = document.getElementById('senha').value;
+        var senha2 = document.getElementById('confirmaSenha').value;
+        var mensagemErro = document.getElementById('erro-senha');
+
+        if (senha1 !== senha2) {
+            // Senhas diferentes: mostra o erro e bloqueia o envio (return false)
+            mensagemErro.style.display = 'block';
+            document.getElementById('confirmaSenha').style.borderColor = '#ff4b2b';
+            return false; 
+        } else {
+            // Senhas iguais: esconde o erro e deixa o Java salvar (return true)
+            mensagemErro.style.display = 'none';
+            document.getElementById('confirmaSenha').style.borderColor = 'rgba(3, 233, 244, 0.2)';
+            return true;
+        }
+    }
+</script>
+</body>
+</html>
