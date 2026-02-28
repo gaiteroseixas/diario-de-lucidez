@@ -5,10 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 public class UsuarioController {
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -23,28 +28,17 @@ public class UsuarioController {
 
     // 2. Recebe os dados, verifica duplicata, salva e dispara o e-mail
     @PostMapping("/cadastro")
-    public String salvarUsuario(Usuario usuario, Model model) {
-        
-        // PASSO A: Busca no banco para ver se o e-mail já existe
-        Usuario usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+    public String cadastrarUsuario(Usuario usuario) {
+        // 1. Criptografia: Transforma a senha real em um código seguro
+        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCriptografada);
 
-        // PASSO B: Se achou alguém, devolve o erro para a tela!
-        if (usuarioExistente != null) {
-            model.addAttribute("erro", "Esse e-mail já está cadastrado. Tente fazer login!");
-            return "cadastro"; // Interrompe o processo e recarrega a página de cadastro
-        }
-
-        // PASSO C: Se chegou até aqui, o e-mail é novo! Salva no PostgreSQL.
+        // 2. Persistência: Agora o banco salva apenas o código, não a senha real
         usuarioRepository.save(usuario);
 
-        // PASSO D: Dispara o e-mail de boas-vindas
-        try {
-            emailService.enviarEmailBoasVindas(usuario.getEmail(), usuario.getNome());
-        } catch (Exception e) {
-            System.out.println("Erro ao enviar e-mail: " + e.getMessage());
-        }
+        // 3. Notificação: Envia o e-mail (que já configuramos no Brevo)
+        emailService.enviarEmailBoasVindas(usuario.getEmail(), usuario.getNome());
 
-        // Sucesso! Manda o usuário para a tela de login
-        return "redirect:/login"; 
+        return "redirect:/login";
     }
 }
