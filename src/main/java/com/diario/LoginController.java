@@ -22,6 +22,9 @@ public class LoginController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private CriptografiaService criptografiaService;
+    
     @GetMapping("/")
     public String exibirIndex() {
         return "index";
@@ -48,6 +51,18 @@ public class LoginController {
         model.addAttribute("nomeUsuario", user.getNome()); 
 
         List<Sonho> listaSonhos = sonhoRepository.findByUsuario(user);
+        
+        for (Sonho s : listaSonhos) {
+            try {
+                if (s.getRelato() != null && !s.getRelato().isEmpty()) {
+                    String relatoAberto = criptografiaService.descriptografar(s.getRelato());
+                    s.setRelato(relatoAberto);
+                }
+            } catch (Exception e) {
+                // Se cair aqui, é porque o sonho é antigo e foi salvo sem criptografia. 
+                // O sistema ignora e mostra o texto original normal.
+            }
+        }
         
         // Agrupa os sonhos pela data, do mais recente para o mais antigo
         Map<java.time.LocalDate, List<Sonho>> sonhosAgrupados = listaSonhos.stream()
@@ -147,13 +162,23 @@ public class LoginController {
 
     @PostMapping("/salvar-sonho")
     public String salvarSonho(Sonho novoSonho) {
-        // Pega o usuário via Spring Security para salvar o sonho
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String emailDoUsuario = auth.getName(); 
         Usuario user = usuarioRepository.findByEmail(emailDoUsuario);
 
         if (user != null) {
             novoSonho.setUsuario(user);
+            
+            // CRIPTOGRAFIA: Tranca o relato antes de ir pro banco
+            try {
+                if (novoSonho.getRelato() != null && !novoSonho.getRelato().isEmpty()) {
+                    String relatoFechado = criptografiaService.criptografar(novoSonho.getRelato());
+                    novoSonho.setRelato(relatoFechado);
+                }
+            } catch (Exception e) {
+                System.out.println("Erro ao criptografar o sonho: " + e.getMessage());
+            }
+
             sonhoRepository.save(novoSonho);
         }
         return "redirect:/home";
@@ -169,7 +194,18 @@ public class LoginController {
     public String editarSonho(@PathVariable Long id, Model model) {
         Sonho sonho = sonhoRepository.findById(id).orElse(null);
        
-        model.addAttribute("sonhoParaEditar", sonho);
+        if (sonho != null) {
+            try {
+                if (sonho.getRelato() != null && !sonho.getRelato().isEmpty()) {
+                    String relatoAberto = criptografiaService.descriptografar(sonho.getRelato());
+                    sonho.setRelato(relatoAberto);
+                }
+            } catch (Exception e) {
+                // Se der erro na descriptografia, segue a vida
+            }
+            
+            model.addAttribute("sonhoParaEditar", sonho);
+        }
          
         return exibirHome(model); 
     }
