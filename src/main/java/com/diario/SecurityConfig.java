@@ -20,7 +20,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Desabilita para facilitar o desenvolvimento inicial
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/cadastro", "/login", "/css/**", "/js/**", "/images/**").permitAll() // Páginas públicas
+                // Adicionamos "/" e "/index" para garantir que a página inicial seja pública
+                .requestMatchers("/", "/index", "/cadastro", "/login", "/css/**", "/js/**", "/images/**").permitAll() 
                 .anyRequest().authenticated() // Todo o resto exige login
             )
             .formLogin(form -> form
