@@ -1,15 +1,17 @@
 package com.diario;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class LoginController {
@@ -17,8 +19,6 @@ public class LoginController {
     @Autowired
     private SonhoRepository sonhoRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
     
     @GetMapping("/")
     public String exibirIndex() {
@@ -30,18 +30,6 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String processarLogin(String email, String senha, Model model, HttpSession session) {
-        Usuario user = usuarioRepository.findByEmail(email);
-
-        if (user != null && user.getSenha().equals(senha)) {
-            session.setAttribute("usuarioLogado", user);
-            return "redirect:/home";
-        }
-        
-        model.addAttribute("erro", "E-mail ou senha inválidos!");
-        return "login";
-    }
 
     @GetMapping("/home")
     public String exibirHome(Model model, HttpSession session) {
