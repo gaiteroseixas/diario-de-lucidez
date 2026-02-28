@@ -1,6 +1,7 @@
 package com.diario;
 
 import jakarta.persistence.*; // Simplificando os imports
+import org.springframework.format.annotation.DateTimeFormat; 
 
 @Entity 
 public class Sonho {
@@ -16,12 +17,14 @@ public class Sonho {
 
     private String corFundo;
     private Integer lucidez; 
-    private java.time.LocalDate dataRegistro = java.time.LocalDate.now();
     
+    // ANOTAÇÃO ADICIONADA AQUI:
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private java.time.LocalDate dataRegistro = java.time.LocalDate.now();
     
     // --- NOVO CAMPO DE RELACIONAMENTO ---
     @ManyToOne 
-    @JoinColumn(name = "usuario_id", nullable = true) // Mude de false para true
+    @JoinColumn(name = "usuario_id", nullable = true) 
     private Usuario usuario;
     // ------------------------------------
 

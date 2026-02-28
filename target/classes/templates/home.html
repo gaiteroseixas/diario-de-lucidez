@@ -23,135 +23,129 @@
     <div id="inicio" class="tab-content show">
         <h1>Nova Jornada Onírica</h1>
         
-        <form action="/salvar-sonho" method="post" id="dreamForm" onsubmit="prepareSubmit()">
-            <input type="hidden" name="id" id="dreamId">
+        <form th:action="@{/salvar-sonho}" method="post" id="dreamForm" onsubmit="prepareSubmit()">
+    
+    <input type="hidden" name="id" id="dreamId" th:value="${sonhoParaEditar?.id}">
                   
-            <div class="form-row">
-                <input type="text" name="titulo" id="titulo" placeholder="Dê um nome à sua jornada.." class="input-title" required>
-            </div>
+    <div class="form-row" style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+        
+        <div style="flex: 0 0 auto;">
+            <input type="date" name="dataRegistro" id="dataSonho" required th:value="${sonhoParaEditar?.dataRegistro}" 
+       style="padding: 10px 15px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.5); color: #03e9f4; border-radius: 8px; outline: none; font-family: inherit; font-weight: bold; cursor: pointer;">
+        </div>
 
-           <div class="editor-toolbar" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; padding: 10px; background: rgba(28, 42, 63, 0.8); border-radius: 8px; border: 1px solid rgba(3, 233, 244, 0.3); align-items: center;">
-    
-    <button type="button" onclick="formatarTexto('bold')" title="Negrito" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; font-weight: bold; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">B</button>
-    
-    <button type="button" onclick="formatarTexto('italic')" title="Itálico" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; font-style: italic; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">I</button>
-    
-    <button type="button" onclick="formatarTexto('underline')" title="Sublinhado" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">U</button>
-
-    <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
-
-    <button type="button" onclick="formatarTexto('insertUnorderedList')" title="Lista com Marcadores" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; padding: 0 10px; height: 32px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">• Lista</button>
-
-    <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
-
-    <div style="display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 4px;">
-        <label style="color: #8a9fb5; font-size: 0.85em;">Cor do Texto:</label>
-        <input type="color" onchange="mudarCor(this.value, 'foreColor')" title="Escolher cor da letra" style="border: none; background: transparent; cursor: pointer; height: 26px; width: 26px; padding: 0;">
+        <div style="flex: 1;">
+            <input type="text" name="titulo" id="titulo" placeholder="Dê um nome à sua jornada.." class="input-title" required th:value="${sonhoParaEditar?.titulo}" style="width: 100%; box-sizing: border-box; margin: 0;">
+        </div>
+        
     </div>
 
-    <div style="display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 4px;">
-        <label style="color: #8a9fb5; font-size: 0.85em;">Fundo:</label>
-        <input type="color" onchange="mudarCor(this.value, 'hiliteColor')" title="Escolher cor de fundo do texto" style="border: none; background: transparent; cursor: pointer; height: 26px; width: 26px; padding: 0;">
+    <div class="editor-toolbar" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; padding: 10px; background: rgba(28, 42, 63, 0.8); border-radius: 8px; border: 1px solid rgba(3, 233, 244, 0.3); align-items: center;">
+        <button type="button" onclick="formatarTexto('bold')" title="Negrito" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; font-weight: bold; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">B</button>
+        <button type="button" onclick="formatarTexto('italic')" title="Itálico" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; font-style: italic; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">I</button>
+        <button type="button" onclick="formatarTexto('underline')" title="Sublinhado" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; width: 32px; height: 32px; cursor: pointer; text-decoration: underline; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">U</button>
+        <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
+        <button type="button" onclick="formatarTexto('insertUnorderedList')" title="Lista com Marcadores" style="background: rgba(255,255,255,0.05); color: #cbd5e0; border: 1px solid transparent; border-radius: 4px; padding: 0 10px; height: 32px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'; this.style.color='#03e9f4';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.color='#cbd5e0';">• Lista</button>
+        <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
+        <div style="display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 4px;">
+            <label style="color: #8a9fb5; font-size: 0.85em;">Cor do Texto:</label>
+            <input type="color" onchange="mudarCor(this.value, 'foreColor')" title="Escolher cor da letra" style="border: none; background: transparent; cursor: pointer; height: 26px; width: 26px; padding: 0;">
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px; background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 4px;">
+            <label style="color: #8a9fb5; font-size: 0.85em;">Fundo:</label>
+            <input type="color" onchange="mudarCor(this.value, 'hiliteColor')" title="Escolher cor de fundo do texto" style="border: none; background: transparent; cursor: pointer; height: 26px; width: 26px; padding: 0;">
+        </div>
     </div>
 
-</div>
-
-<div id="editor" contenteditable="true" class="dream-editor"></div>
-<input type="hidden" name="relato" id="relatoInput">
+    <div id="editor" contenteditable="true" class="dream-editor" th:utext="${sonhoParaEditar?.relato}"></div>
+    <input type="hidden" name="relato" id="relatoInput" th:value="${sonhoParaEditar?.relato}">
                        
-            <div class="lucidez-section" style="margin: 20px 0 30px 0; padding: 15px 20px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 4px solid #03e9f4; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-    
-    <div>
-        <label for="lucidez" style="color: #03e9f4; font-weight: bold; font-size: 1.1em; margin-bottom: 5px; display: block;">✨ Nível de Lucidez</label>
-        <p style="color: #8a9fb5; font-size: 0.85em; margin: 0;">Classifique seu grau de consciência durante o sonho.</p>
-    </div>
-
-    <div>
-        <select name="lucidez" id="lucidez" style="padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(3, 233, 244, 0.5); background: rgba(28, 42, 63, 0.8); color: #03e9f4; font-weight: bold; font-size: 1em; outline: none; box-shadow: 0 0 10px rgba(3, 233, 244, 0.1); cursor: pointer; appearance: auto;">
-            <option value="0" style="background: #1c2a3f; color: white;">Não Lúcido (0)</option>
-            <option value="1" style="background: #1c2a3f; color: white;">Nível 1 (Leve suspeita)</option>
-            <option value="2" style="background: #1c2a3f; color: white;">Nível 2 (Consciência clara)</option>
-            <option value="3" style="background: #1c2a3f; color: white;">Nível 3 (Controle total)</option>
-        </select>
-    </div>
-
-</div>
-<div style="background: rgba(185, 66, 245, 0.1); border-left: 4px solid #b942f5; padding: 12px 15px; margin-bottom: 25px; border-radius: 0 8px 8px 0; display: flex; align-items: center; gap: 10px;">
-    <span style="font-size: 1.2em;">💡</span>
-    <p style="color: #cbd5e0; font-size: 0.9em; margin: 0; line-height: 1.4;">
-        <strong style="color: #b942f5;">Dica para o Painel de Análise:</strong> 
-        Para que suas estatísticas funcionem perfeitamente, separe os diferentes elementos usando vírgulas. <br>
-        <em style="color: #8a9fb5;">Exemplo: cachorro, relógio derretido, voar, medo</em>
-    </p>
-</div>
-
-<div class="category-section" style="margin-bottom: 30px;">
-
-            <div class="category-section" style="margin-bottom: 30px; padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px dashed rgba(3, 233, 244, 0.3);">
-    <h3 style="color: #03e9f4; margin-top: 0; border-bottom: 1px solid rgba(3, 233, 244, 0.2); padding-bottom: 10px;">📊 Categorização Básica</h3>
-    
-    <div class="basic-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 15px;">
-        <div class="category-item">
-            <label style="color: #03e9f4; font-weight: bold; display: block; margin-bottom: 5px;">👥 Personagens</label>
-            <input type="text" name="personagens" placeholder="Ex: Pai, Amigo" style="width: 100%; padding: 10px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.3); color: white; border-radius: 6px; outline: none;">
+    <div class="lucidez-section" style="margin: 20px 0 30px 0; padding: 15px 20px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 4px solid #03e9f4; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+        <div>
+            <label for="lucidez" style="color: #03e9f4; font-weight: bold; font-size: 1.1em; margin-bottom: 5px; display: block;">✨ Nível de Lucidez</label>
+            <p style="color: #8a9fb5; font-size: 0.85em; margin: 0;">Classifique seu grau de consciência durante o sonho.</p>
         </div>
-        <div class="category-item">
-            <label style="color: #03e9f4; font-weight: bold; display: block; margin-bottom: 5px;">📍 Lugares</label>
-            <input type="text" name="lugares" placeholder="Ex: Casa antiga" style="width: 100%; padding: 10px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.3); color: white; border-radius: 6px; outline: none;">
-        </div>
-        <div class="category-item">
-            <label style="color: #03e9f4; font-weight: bold; display: block; margin-bottom: 5px;">✨ Objetos</label>
-            <input type="text" name="simbolos" placeholder="Ex: Chave, Carro" style="width: 100%; padding: 10px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.3); color: white; border-radius: 6px; outline: none;">
+        <div>
+            <select name="lucidez" id="lucidez" th:value="${sonhoParaEditar?.lucidez}" style="padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(3, 233, 244, 0.5); background: rgba(28, 42, 63, 0.8); color: #03e9f4; font-weight: bold; font-size: 1em; outline: none; box-shadow: 0 0 10px rgba(3, 233, 244, 0.1); cursor: pointer; appearance: auto;">
+                <option value="0" style="background: #1c2a3f; color: white;" th:selected="${sonhoParaEditar?.lucidez == 0}">Não Lúcido (0)</option>
+                <option value="1" style="background: #1c2a3f; color: white;" th:selected="${sonhoParaEditar?.lucidez == 1}">Nível 1 (Leve suspeita)</option>
+                <option value="2" style="background: #1c2a3f; color: white;" th:selected="${sonhoParaEditar?.lucidez == 2}">Nível 2 (Consciência clara)</option>
+                <option value="3" style="background: #1c2a3f; color: white;" th:selected="${sonhoParaEditar?.lucidez == 3}">Nível 3 (Controle total)</option>
+            </select>
         </div>
     </div>
-</div>
 
-            <div class="category-section advanced" style="margin-bottom: 30px; padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px dashed rgba(3, 233, 244, 0.3);">
-                <h3 style="color: #03e9f4; margin-top: 0; border-bottom: 1px solid rgba(3, 233, 244, 0.2); padding-bottom: 10px;">🔬 Sistema LaBerge (Avançado)</h3>
-                
-                <div class="laberge-form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 15px;">
-                    
-                    <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
-                        <h4 style="color: #8a9fb5; margin-bottom: 5px;">1. Consciência Interna</h4>
-                        <input type="text" name="pensamentos" placeholder="Pensamentos" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="emocoes" placeholder="Emoções" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="sensacoes" placeholder="Sensações" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="percepcoes" placeholder="Percepções" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                    </div>
-                    
-                    <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
-                        <h4 style="color: #8a9fb5; margin-bottom: 5px;">2. Ação</h4>
-                        <input type="text" name="acaoEgo" placeholder="Sua Ação" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="acaoPersonagem" placeholder="Ação Personagem" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="acaoObjeto" placeholder="Ação Objeto" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                    </div>
+    <div style="background: rgba(185, 66, 245, 0.1); border-left: 4px solid #b942f5; padding: 12px 15px; margin-bottom: 25px; border-radius: 0 8px 8px 0; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.2em;">💡</span>
+        <p style="color: #cbd5e0; font-size: 0.9em; margin: 0; line-height: 1.4;">
+            <strong style="color: #b942f5;">Dica para o Painel de Análise:</strong> 
+            Para que suas estatísticas funcionem perfeitamente, separe os diferentes elementos usando vírgulas. <br>
+            <em style="color: #8a9fb5;">Exemplo: cachorro, relógio derretido, voar, medo</em>
+        </p>
+    </div>
 
-                    <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
-                        <h4 style="color: #8a9fb5; margin-bottom: 5px;">3. Forma</h4>
-                        <input type="text" name="formaEgo" placeholder="Sua Forma" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="formaPersonagem" placeholder="Forma Personagem" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="formaObjeto" placeholder="Forma Objeto" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="formaCenario" placeholder="Forma Cenário" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                    </div>
-
-                    <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
-                        <h4 style="color: #8a9fb5; margin-bottom: 5px;">4. Contexto</h4>
-                        <input type="text" name="papelEgo" placeholder="Seu Papel" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="lugarCenario" placeholder="Lugar Cenário" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="tempoCenario" placeholder="Tempo Cenário" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                        <input type="text" name="situacaoBizarra" placeholder="Situação Bizarra" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;">
-                    </div>
-                    
-                </div>
+    <div class="category-section" style="margin-bottom: 30px; padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px dashed rgba(3, 233, 244, 0.3);">
+        <h3 style="color: #03e9f4; margin-top: 0; border-bottom: 1px solid rgba(3, 233, 244, 0.2); padding-bottom: 10px;">📊 Categorização Básica</h3>
+        <div class="basic-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 15px;">
+            <div class="category-item">
+                <label style="color: #03e9f4; font-weight: bold; display: block; margin-bottom: 5px;">👥 Personagens</label>
+                <input type="text" name="personagens" placeholder="Ex: Pai, Amigo" style="width: 100%; padding: 10px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.3); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.personagens}">
             </div>
+            <div class="category-item">
+                <label style="color: #03e9f4; font-weight: bold; display: block; margin-bottom: 5px;">📍 Lugares</label>
+                <input type="text" name="lugares" placeholder="Ex: Casa antiga" style="width: 100%; padding: 10px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.3); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.lugares}">
+            </div>
+            <div class="category-item">
+                <label style="color: #03e9f4; font-weight: bold; display: block; margin-bottom: 5px;">✨ Objetos</label>
+                <input type="text" name="simbolos" placeholder="Ex: Chave, Carro" style="width: 100%; padding: 10px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.3); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.simbolos}">
+            </div>
+        </div>
+    </div>
 
-            <div class="form-footer" style="margin-top: 30px;">
-                <button type="submit" class="btn-save" style="padding: 12px 30px; background: #03e9f4; color: #1c2a3f; font-weight: bold; border-radius: 8px; border: none; cursor: pointer;">💾 Salvar no Fichário</button>
+    <div class="category-section advanced" style="margin-bottom: 30px; padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; border: 1px dashed rgba(3, 233, 244, 0.3);">
+        <h3 style="color: #03e9f4; margin-top: 0; border-bottom: 1px solid rgba(3, 233, 244, 0.2); padding-bottom: 10px;">🔬 Sistema LaBerge (Avançado)</h3>
+        <div class="laberge-form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 15px;">
+            
+            <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
+                <h4 style="color: #8a9fb5; margin-bottom: 5px;">1. Consciência Interna</h4>
+                <input type="text" name="pensamentos" placeholder="Pensamentos" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.pensamentos}">
+                <input type="text" name="emocoes" placeholder="Emoções" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.emocoes}">
+                <input type="text" name="sensacoes" placeholder="Sensações" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.sensacoes}">
+                <input type="text" name="percepcoes" placeholder="Percepções" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.percepcoes}">
             </div>
             
-        </form>
-    </div> 
-    </div> <div id="historico" class="tab-content">
+            <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
+                <h4 style="color: #8a9fb5; margin-bottom: 5px;">2. Ação</h4>
+                <input type="text" name="acaoEgo" placeholder="Sua Ação" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.acaoEgo}">
+                <input type="text" name="acaoPersonagem" placeholder="Ação Personagem" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.acaoPersonagem}">
+                <input type="text" name="acaoObjeto" placeholder="Ação Objeto" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.acaoObjeto}">
+            </div>
+
+            <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
+                <h4 style="color: #8a9fb5; margin-bottom: 5px;">3. Forma</h4>
+                <input type="text" name="formaEgo" placeholder="Sua Forma" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.formaEgo}">
+                <input type="text" name="formaPersonagem" placeholder="Forma Personagem" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.formaPersonagem}">
+                <input type="text" name="formaObjeto" placeholder="Forma Objeto" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.formaObjeto}">
+                <input type="text" name="formaCenario" placeholder="Forma Cenário" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.formaCenario}">
+            </div>
+
+            <div class="laberge-group" style="display: flex; flex-direction: column; gap: 8px;">
+                <h4 style="color: #8a9fb5; margin-bottom: 5px;">4. Contexto</h4>
+                <input type="text" name="papelEgo" placeholder="Seu Papel" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.papelEgo}">
+                <input type="text" name="lugarCenario" placeholder="Lugar Cenário" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.lugarCenario}">
+                <input type="text" name="tempoCenario" placeholder="Tempo Cenário" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.tempoCenario}">
+                <input type="text" name="situacaoBizarra" placeholder="Situação Bizarra" style="padding: 8px; background: rgba(28, 42, 63, 0.6); border: 1px solid rgba(3, 233, 244, 0.2); color: white; border-radius: 6px; outline: none;" th:value="${sonhoParaEditar?.situacaoBizarra}">
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="form-footer" style="margin-top: 30px;">
+        <button type="submit" class="btn-save" style="padding: 12px 30px; background: #03e9f4; color: #1c2a3f; font-weight: bold; border-radius: 8px; border: none; cursor: pointer;">💾 Salvar no Fichário</button>
+    </div>
+    
+</form>
+</div> <div id="historico" class="tab-content">
     <h2 style="color: #03e9f4; margin-bottom: 20px;">Histórico de Sonhos</h2>
     
     <div th:if="${#maps.isEmpty(sonhosAgrupados)}" style="color: #8a9fb5; text-align: center; margin-top: 40px; font-size: 1.1em;">
@@ -172,7 +166,11 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; margin-bottom: 15px;">
                     <span style="color: #ffcc00; font-weight: bold; font-size: 0.95em;">✨ Lucidez: Nível <span th:text="${sonho.lucidez}"></span></span>
                     
-                    <a th:href="@{/excluir-sonho/{id}(id=${sonho.id})}" style="color: #ff4b2b; text-decoration: none; font-size: 0.8em; border: 1px solid rgba(255, 75, 43, 0.4); padding: 5px 10px; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.background='rgba(255, 75, 43, 0.1)'" onmouseout="this.style.background='transparent'">Excluir</a>
+                    <div style="display: flex; gap: 10px;">
+                        <a th:href="@{/editar-sonho/{id}(id=${sonho.id})}" style="color: #03e9f4; text-decoration: none; font-size: 0.8em; border: 1px solid rgba(3, 233, 244, 0.4); padding: 5px 10px; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.background='rgba(3, 233, 244, 0.1)'" onmouseout="this.style.background='transparent'">Editar</a>
+                        
+                        <a th:href="@{/excluir-sonho/{id}(id=${sonho.id})}" style="color: #ff4b2b; text-decoration: none; font-size: 0.8em; border: 1px solid rgba(255, 75, 43, 0.4); padding: 5px 10px; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.background='rgba(255, 75, 43, 0.1)'" onmouseout="this.style.background='transparent'">Excluir</a>
+                    </div>
                 </div>
                 
                 <div style="color: #cbd5e0; line-height: 1.6; font-size: 1em; white-space: pre-wrap;" th:utext="${sonho.relato}"></div>
@@ -181,7 +179,9 @@
 
         </div>
     </div>
-</div> <div id="analise" class="tab-content">
+</div>
+
+<div id="analise" class="tab-content">
     <h2 style="color: #03e9f4; margin-bottom: 20px;">Painel de Análise Onírica</h2>
     
     <div class="stats-grid" style="display: flex; gap: 20px; margin-bottom: 30px;">
@@ -625,6 +625,16 @@
         document.execCommand(tipoComando, false, cor);
         document.getElementById('editor').focus();
     }
+ // Preenche a data com o dia de hoje caso seja um sonho novo
+    document.addEventListener("DOMContentLoaded", function() {
+        var dataInput = document.getElementById('dataSonho');
+        if (!dataInput.value) {
+            var hoje = new Date();
+            // Pega o fuso horário local e formata para YYYY-MM-DD
+            var dataFormatada = new Date(hoje.getTime() - (hoje.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+            dataInput.value = dataFormatada;
+        }
+    });
 </script>
 </body>
 </html>

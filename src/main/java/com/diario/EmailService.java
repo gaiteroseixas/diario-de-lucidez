@@ -3,6 +3,7 @@ package com.diario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async; // 1. Importação adicionada
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Async // 2. Anotação adicionada para envio em segundo plano
     public void enviarEmailBoasVindas(String emailDestino, String nomeUsuario) {
         SimpleMailMessage mensagem = new SimpleMailMessage();
         

@@ -165,6 +165,16 @@ public class LoginController {
         sonhoRepository.deleteById(id);
         return "redirect:/home?aba=historico";
     }
+    
+    @GetMapping("/editar-sonho/{id}")
+    public String editarSonho(@PathVariable Long id, Model model, HttpSession session) {
+        Sonho sonho = sonhoRepository.findById(id).orElse(null);
+       
+        model.addAttribute("sonhoParaEditar", sonho);
+         
+        return exibirHome(model, session); 
+      
+    }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
