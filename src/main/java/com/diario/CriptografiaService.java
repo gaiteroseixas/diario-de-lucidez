@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class CriptografiaService {
 
     // No futuro, coloque esta chave nas Environment Variables do Render
-    private static final String CHAVE_MESTRA = "cRiPtOfIa5290kKLoRtQ2614kjrosnhH"
+    private static final String CHAVE_MESTRA = "cRiPtOfIa5290kKLoRtQ28475kjrosnhH"
     		+ ""; 
     private static final String ALGORITMO = "AES";
 

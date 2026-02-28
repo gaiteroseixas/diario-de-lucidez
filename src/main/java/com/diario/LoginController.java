@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -19,7 +19,9 @@ public class LoginController {
     @Autowired
     private SonhoRepository sonhoRepository;
 
-    
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @GetMapping("/")
     public String exibirIndex() {
         return "index";
@@ -30,10 +32,14 @@ public class LoginController {
         return "login";
     }
 
-
     @GetMapping("/home")
-    public String exibirHome(Model model, HttpSession session) {
-        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+    public String exibirHome(Model model) {
+        // 1. Pergunta ao Spring Security quem é o usuário logado (pelo E-mail)
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String emailDoUsuario = auth.getName(); 
+        
+        // 2. Busca o usuário completo no banco de dados
+        Usuario user = usuarioRepository.findByEmail(emailDoUsuario);
 
         if (user == null) {
             return "redirect:/login";
@@ -42,7 +48,8 @@ public class LoginController {
         model.addAttribute("nomeUsuario", user.getNome()); 
 
         List<Sonho> listaSonhos = sonhoRepository.findByUsuario(user);
-     // Agrupa os sonhos pela data, do mais recente para o mais antigo
+        
+        // Agrupa os sonhos pela data, do mais recente para o mais antigo
         Map<java.time.LocalDate, List<Sonho>> sonhosAgrupados = listaSonhos.stream()
                 .collect(java.util.stream.Collectors.groupingBy(
                         Sonho::getDataRegistro,
@@ -139,8 +146,12 @@ public class LoginController {
     }
 
     @PostMapping("/salvar-sonho")
-    public String salvarSonho(Sonho novoSonho, HttpSession session) {
-        Usuario user = (Usuario) session.getAttribute("usuarioLogado");
+    public String salvarSonho(Sonho novoSonho) {
+        // Pega o usuário via Spring Security para salvar o sonho
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String emailDoUsuario = auth.getName(); 
+        Usuario user = usuarioRepository.findByEmail(emailDoUsuario);
+
         if (user != null) {
             novoSonho.setUsuario(user);
             sonhoRepository.save(novoSonho);
@@ -155,19 +166,12 @@ public class LoginController {
     }
     
     @GetMapping("/editar-sonho/{id}")
-    public String editarSonho(@PathVariable Long id, Model model, HttpSession session) {
+    public String editarSonho(@PathVariable Long id, Model model) {
         Sonho sonho = sonhoRepository.findById(id).orElse(null);
        
         model.addAttribute("sonhoParaEditar", sonho);
          
-        return exibirHome(model, session); 
-      
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
+        return exibirHome(model); 
     }
 
     // Método que quebra as vírgulas e conta as palavras

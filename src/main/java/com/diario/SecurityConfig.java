@@ -25,13 +25,14 @@ public class SecurityConfig {
                 .anyRequest().authenticated() // Todo o resto exige login
             )
             .formLogin(form -> form
-            	    .loginPage("/login") // Sua página de login customizada
-            	    .usernameParameter("email") // Ensina o Spring a ler o name="email" do seu HTML
-            	    .passwordParameter("senha") // Ensina o Spring a ler o name="senha" do seu HTML
-            	    .defaultSuccessUrl("/home", true) // Para onde vai depois de logar
+            	    .loginPage("/login") 
+            	    .loginProcessingUrl("/login") // O Spring Security "ouve" o POST aqui
+            	    .usernameParameter("email")    // Nome exato do campo no seu HTML
+            	    .passwordParameter("senha")    // Nome exato do campo no seu HTML
+            	    .defaultSuccessUrl("/home", true) // O "true" força ele a ir para a home
+            	    .failureUrl("/login?error=true")  // Se errar a senha, avisa na URL
             	    .permitAll()
-            	
-            )
+            	)
             .logout(logout -> logout.permitAll());
 
         return http.build();
